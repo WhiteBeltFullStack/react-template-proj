@@ -4,7 +4,7 @@ export function Home() {
     return (
         <section>
             <h1>Books Store</h1>
-            {/* <UserPreview /> */}
+            <UserPreview />
         </section>
     )
 }
