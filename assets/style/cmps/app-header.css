@@ -1,0 +1,21 @@
+.app-header {
+  background-color: var(--clr1);
+  color: var(--clr1bg);
+  padding-block: 1em;
+}
+
+.app-nav {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-nav nav {
+  display: flex;
+  gap: 20px;
+}
+
+.app-nav nav a {
+  cursor: pointer;
+}
