@@ -1,6 +1,6 @@
 
 
-export function CarPreview({book}){
+export function BookPreview({book}){
 
     
     return (

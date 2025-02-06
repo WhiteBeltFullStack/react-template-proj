@@ -1,6 +1,7 @@
 // import React from 'react'
 import { bookService } from '../services/book.service.js'
 import { BookList } from '../cmps/BookList.jsx'
+import { BookDetails } from '../pages/BookDetails.jsx'
 
 const { useState, useEffect } = React
 
@@ -10,25 +11,44 @@ export function BookIndex() {
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter)
   const [selectedBookId, setSelectedBookId] = useState(null)
 
-useEffect(()=>{
+  useEffect(() => {
     loadBooks()
+  }, [filterBy])
 
-},[filterBy])
+  function loadBooks() {
+    bookService.query(filterBy).then((books) => setBooks(books))
+  }
 
-function loadBooks(){
-    bookService.query(filterBy)
-    .then(books => setBooks(books))
-}
+  function onSetSelectedBookId(id) {
+    console.log('id:', id)
+    setSelectedBookId(id)
+  }
 
-    if(!books) return 'Loading Data...'
+  function onRemoveBook(id) {
+    bookService
+      .remove(id)
+      .then(() =>
+        setBooks((prevBooks) => prevBooks.filter((book) => book.id !== id))
+      )
+  }
+
+  if (!books) return 'Loading Data...'
   return (
     <section>
-        <h1>Book Index!</h1>
-        <BookList books={books} />
-        
+      <h1>Book Index!</h1>
 
-        
-
+      {selectedBookId ? (
+        <BookDetails
+          onSetSelectedBookId={onSetSelectedBookId}
+          selectedBookId={selectedBookId}
+        />
+      ) : (
+        <BookList
+          books={books}
+          onRemoveBook={onRemoveBook}
+          onSetSelectedBookId={onSetSelectedBookId}
+        />
+      )}
     </section>
   )
 }
