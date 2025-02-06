@@ -1,13 +1,31 @@
 .book-details {
+  position: relative;
   display: grid;
-  grid-template-columns: 200px 1fr; /* 200px for the image, the rest for text */
-  gap: 20px; /* Adds space between image and text */
+  grid-template-columns: 200px 1fr;
+  gap: 20px;
   padding: 20px;
   max-width: 800px;
   margin: 20px auto;
   background-color: #f4f4f9;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.book-details .on-sale {
+  position: absolute;
+  top: 15px;
+  right: 40px;
+  animation: pulse 1s infinite alternate ease-in-out;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.5);
+    color: red;
+  }
 }
 
 .book-details img {
@@ -47,6 +65,14 @@
   background-color: #444;
 }
 
-div{
-  margin: 0;p
+div {
+  margin: 0;
+}
+
+.red{
+  color: red;
+}
+
+.green {
+  color: green;
 }

@@ -1,6 +1,7 @@
 import { utilService} from './util.service.js'
 import { storageService } from './async-storage.service.js'
 import {books} from './books.js'
+// console.log('books:',books)
 
 const BOOK_KEY = 'bookDB'
 _createBooks()
@@ -13,6 +14,11 @@ export const bookService = {
   getEmptyBook,
   getDefaultFilter,
 }
+
+// const newBooks = books.map(book => ({
+//   ...book,
+//   description: utilService.makeLorem() 
+// }));
 
 function query(filterBy = {}) {
   return storageService.query(BOOK_KEY).then((books) => {
@@ -58,17 +64,19 @@ function getDefaultFilter() {
 
 function _createBooks(){
     let storedBooks = utilService.loadFromStorage(BOOK_KEY)
-    if(!storedBooks || !storedBooks.length){
+    console.log('storedBooks:',storedBooks)
+    if(!storedBooks || !storedBooks.length || storedBooks.length === 0 ){
      const defaultBooks = [
-            _createBook('metus hendrerit', 'mi est eros convallis auctor arcu dapibus himenaeos', ['Barbara Cartland'], 1999, 'placerat nisi sodales suscipit tellus tincidunt mauris elit sit luctus interdum ad dictum platea vehicula conubia fermentum habitasse congue suspendisse', 713, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/20.jpg', 'en', { amount: 109, currencyCode: 'EUR', isOnSale: false }),
-            _createBook('morbi', 'lorem euismod dictumst inceptos mi', ['Barbara Cartland'], 1978, 'aliquam pretium lorem laoreet etiam odio cubilia iaculis placerat aliquam tempor nisl auctor', 129, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/14.jpg', 'sp', { amount: 44, currencyCode: 'EUR', isOnSale: true }),
-            _createBook('at viverra venenatis', 'gravida libero facilisis rhoncus urna etiam', ['Dr. Seuss'], 1999, 'lorem molestie ut euismod ad quis mi ultricies nisl cursus suspendisse dui tempor sit suscipit metus etiam euismod tortor sagittis habitant', 972, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/2.jpg', 'he', { amount: 108, currencyCode: 'ILS', isOnSale: false })
+            _createBook('metus hendrerit', 'mi est eros convallis auctor arcu dapibus himenaeos', ['Barbara Cartland'], 1999, utilService.makeLorem(), 713, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/20.jpg', 'en', { amount: 109, currencyCode: 'EUR', isOnSale: false }),
+            _createBook('morbi', 'lorem euismod dictumst inceptos mi', ['Barbara Cartland'], 1978,  utilService.makeLorem(), 129, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/14.jpg', 'sp', { amount: 44, currencyCode: 'EUR', isOnSale: true }),
+            _createBook('at viverra venenatis', 'gravida libero facilisis rhoncus urna etiam', ['Dr. Seuss'], 1999, utilService.makeLorem(), 972, ['Computers', 'Hack'], 'http://coding-academy.org/books-photos/2.jpg', 'he', { amount: 108, currencyCode: 'ILS', isOnSale: false })
         ]
-        utilService.saveToStorage(BOOK_KEY,books)
-        return defaultBooks
+        utilService.saveToStorage(BOOK_KEY,defaultBooks)
+        
+      }
+      console.log('storedBooks:',storedBooks)
+      utilService.saveToStorage(BOOK_KEY,storedBooks)
     }
-    return storedBooks
-}
 
 
 function _createBook(title, subtitle, authors, publishedDate, description, pageCount, categories, thumbnail, language, listPrice) {
