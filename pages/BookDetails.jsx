@@ -1,6 +1,7 @@
 import { bookService } from '../services/book.service.js'
 import { BookCount } from '../cmps/BookCount.jsx'
 import { PublishedDate } from '../cmps/PublishedDate.jsx'
+import { LongText } from '../cmps/LongText.jsx'
 
 const { useState, useEffect } = React
 
@@ -51,7 +52,7 @@ export function BookDetails({ onSetSelectedBookId, selectedBookId }) {
           <strong>Categories:</strong> {book.categories.join(', ')}
         </div>
         <div>
-          <strong>Description:</strong> {book.description}
+         <LongText desc={book.description}/> 
         </div>
         <div>
           <strong>Price:</strong>
