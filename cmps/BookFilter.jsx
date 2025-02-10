@@ -30,6 +30,7 @@ export function BookFilter({ onSetFilterBy, filterBy }) {
           name="title"
           onChange={onHandleChange}
           value={filterBy.title}
+          placeholder="Title"
         />
 
         <label htmlFor="price">Max Price: </label>
@@ -39,6 +40,7 @@ export function BookFilter({ onSetFilterBy, filterBy }) {
           name="price"
           onChange={onHandleChange}
           value={filterBy.price || ''}
+          placeholder="Min Price"
         />
 
         <label htmlFor="min-page-count">Minimum Pages:</label>
@@ -53,3 +55,4 @@ export function BookFilter({ onSetFilterBy, filterBy }) {
     </section>
   )
 }
+
