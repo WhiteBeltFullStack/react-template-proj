@@ -1,0 +1,19 @@
+.book-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  justify-items: center;
+  margin: 0 auto;
+}
+
+.book-form label {
+  font-weight: bold;
+}
+
+.book-form input {
+  width: 300px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+

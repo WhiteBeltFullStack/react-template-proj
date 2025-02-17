@@ -19,9 +19,10 @@ function get(entityType, entityId) {
     })
 }
 
-function post(entityType, newEntity) {
+function post(entityType, newEntity,isRegular = true) {
     newEntity = { ...newEntity }
-    newEntity.id = _makeId()
+    // newEntity.id = _makeId()
+    if(isRegular) newEntity.id = _makeId()
     return query(entityType).then(entities => {
         entities.push(newEntity)
         _save(entityType, entities)

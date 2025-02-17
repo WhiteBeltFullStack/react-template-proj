@@ -16,7 +16,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: .5em 0 .5em;
+  margin: 0.5em 0 0.5em;
   font-family: 'Edu VIC WA NT Beginner', cursive;
 }
 
@@ -29,17 +29,43 @@ a {
   color: unset;
 }
 
-
-
 /* Dont stretch my Media */
 img,
 embed,
 video,
 object {
-  max-width: 100%
+  max-width: 100%;
 }
 
 /* Simple and useful CSS Debugging Technique */
 .debug * {
-  outline: 1px solid gold
+  outline: 1px solid gold;
+}
+
+.error {
+  background-color: rgb(189, 98, 38);
+  color: red;
+}
+.success {
+  background-color: rgb(5, 175, 5);
+  color: green;
+}
+
+
+.user-msg {
+  display: flex;
+  gap: 5px;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+
+  right: 0.5em;
+  bottom: 0.5em;
+  padding: 10px;
+  font-size: 1em;
+
+  box-shadow: 1px 3px 11px 4px rgb(122 122 122 / 91%);
+  border-radius: 20px;
+  background-color: #9dc7a7;
+  color: #094217;
 }

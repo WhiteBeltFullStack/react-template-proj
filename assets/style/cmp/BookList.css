@@ -1,0 +1,40 @@
+.google-book-list {
+  display: flex;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  justify-content: center;
+
+  margin-block-end: 50px;
+}
+
+.google-book-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.google-book-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.google-book-list li:hover {
+  transform: translateY(-2px);
+}
+
+.google-book-list span {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}

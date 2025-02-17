@@ -1,0 +1,40 @@
+.book-reviews {
+  margin-top: 20px;
+  padding: 10px;
+  border-top: 2px solid #ddd;
+}
+
+.review {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.review-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.review-body {
+  margin-bottom: 5px;
+}
+
+.review-rating {
+  font-size: 1.2em;
+  color: gold;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li.review {
+  position: relative;
+  border-radius: 5px;
+  border: 2px solid lightgrey;
+}
+
+.delete-review {
+  position: absolute;
+  top: 0;
+  right: 0;
+}

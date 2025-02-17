@@ -444,7 +444,3 @@ export const books = [
     }
 ]
  
-// export const books = []
-// console.log('books:',books)
-
-utilService.saveToStorage('bookDB',books)
