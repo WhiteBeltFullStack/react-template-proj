@@ -34,3 +34,11 @@
   font-size: 1.2rem;
   color: rgb(241, 236, 236);
 }
+
+.about-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 2rem;
+  font-size: 1.5em;
+  text-decoration: underline;
+}

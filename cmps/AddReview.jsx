@@ -1,10 +1,17 @@
 import { reviewService } from '../services/review.service.js'
 
+// import { StarRating } from '../cmps/StarRating.jsx'
+// import { SelectRating } from '../cmps/SelectRating.jsx'
+// import { NumberInputRating } from '../cmps/NumberInputRating.jsx'
+import { DynamicCmp } from '../cmps/DynamicCmp.jsx'
+
 const { useState, useEffect, useRef } = React
 
 export function AddReview({onSaveReview}) {
   const [reviewToAdd, setReviewToAdd] = useState(reviewService.getEmptyReview())
   const [charsLeft, setCharsLeft] = useState(200)
+
+  const [cmpType, setCmpType] = useState('stars')
 
   function onSubmitForm(ev) {
     ev.preventDefault()
@@ -16,6 +23,10 @@ export function AddReview({onSaveReview}) {
     onSaveReview(reviewToAdd)
   }
 
+  function onChangeCmpType({ target }) {
+    const selectedType = target.value
+    setCmpType(selectedType)
+}
   
 
   useEffect(() => {
@@ -45,8 +56,7 @@ export function AddReview({onSaveReview}) {
             placeholder='Full Name'
           />
 
-          <label htmlFor="rating">Rating : {rating}</label>
-          {/* <input type="range"  className="input-rating" name="rating" value={rating || ''} min={} max={5} onChange={onHandleChange} id="rating"/> */}
+          {/* <label htmlFor="rating">Rating : {rating}</label>
 
           <select
             value={rating}
@@ -59,7 +69,29 @@ export function AddReview({onSaveReview}) {
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-          </select>
+          </select> */}
+
+
+
+<div className='rate-by-choice'>
+                    <p className='bold-txt'>Select rating type:</p>
+                    <label htmlFor="select">Select</label>
+                    <input name='rating' onChange={onChangeCmpType} id='select' type="radio" value='select' />
+
+                    <label htmlFor="numInput">Number Input</label>
+                    <input name='rating' onChange={onChangeCmpType} id='numInput' type="radio" value='numInput' />
+
+                    <label htmlFor="stars">Stars</label>
+                    <input name='rating' onChange={onChangeCmpType} id='stars' type="radio" value='stars' />
+                </div>
+
+                <DynamicCmp  cmpType={cmpType} handleChange={onHandleChange} rating={rating} />
+
+                {/* {cmpType === 'select' && <SelectRating handleChange={onHandleChange} rating={rating} />}
+                {cmpType === 'numInput' && <NumberInputRating handleChange={onHandleChange} rating={rating} />}
+                {cmpType === 'stars' && <StarRating handleChange={onHandleChange} rating={rating} />} */}
+
+
 
           <label htmlFor="date">Date</label>
           <input

@@ -1,6 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
-import { books } from './books.js'
+import { gBooks } from './books.js'
 // console.log('books:',books)
 
 const BOOK_KEY = 'bookDB'
@@ -16,6 +16,9 @@ export const bookService = {
   getDefaultFilter,
   getBooksFromGoogle,
   addGoogleBook,
+  getFilterFromSearchParams,
+  getPriceStats,
+  getBookDifficultyStats,
 }
 
 const gCache = utilService.loadFromStorage(CACHE_GOOGLE_KEY) || {}
@@ -27,6 +30,11 @@ const gCache = utilService.loadFromStorage(CACHE_GOOGLE_KEY) || {}
 
 function query(filterBy = {}) {
   return storageService.query(BOOK_KEY).then((books) => {
+    if (!books || !books.length) {
+      books = gBooks
+      utilService.saveToStorage(BOOK_KEY, books)
+    }
+
     if (filterBy.title) {
       const regExp = new RegExp(filterBy.title, 'i')
       books = books.filter((book) => regExp.test(book.title))
@@ -43,7 +51,7 @@ function query(filterBy = {}) {
 }
 
 function get(bookId) {
-  return storageService.get(BOOK_KEY, bookId).then(_setNextPrevCarId)
+  return storageService.get(BOOK_KEY, bookId).then(_setNextPrevBookId)
 }
 
 function remove(bookId) {
@@ -92,51 +100,82 @@ function getDefaultFilter() {
   return { title: '', minPageCount: '', price: '' }
 }
 
+function getFilterFromSearchParams(params) {
+  // const title = params.get('title') || ''
+  // const minPageCount = params.get('minPageCount') || ''
+  // const price = params.get('price') || ''
+
+  // return { title, minPageCount, price }
+  // OR
+
+  const defaultFilter = getDefaultFilter()
+  const filterBy = {}
+  for (const field in defaultFilter) {
+    filterBy[field] = params.get(field) || defaultFilter[field]
+  }
+
+  return filterBy
+}
+
+// function _createBooks() {
+//   let storedBooks = utilService.loadFromStorage(BOOK_KEY)
+//   console.log('storedBooks:', storedBooks)
+
+//   if (!storedBooks || !storedBooks.length || storedBooks.length === 0) {
+//     const defaultBooks = [
+//       _createBook(
+//         'metus hendrerit',
+//         'mi est eros convallis auctor arcu dapibus himenaeos',
+//         ['Barbara Cartland'],
+//         1999,
+//         utilService.makeLorem(),
+//         713,
+//         ['Computers', 'Hack'],
+//         'http://coding-academy.org/books-photos/20.jpg',
+//         'en',
+//         { amount: 109, currencyCode: 'EUR', isOnSale: false }
+//       ),
+//       _createBook(
+//         'morbi',
+//         'lorem euismod dictumst inceptos mi',
+//         ['Barbara Cartland'],
+//         1978,
+//         utilService.makeLorem(),
+//         129,
+//         ['Computers', 'Hack'],
+//         'http://coding-academy.org/books-photos/14.jpg',
+//         'sp',
+//         { amount: 44, currencyCode: 'EUR', isOnSale: true }
+//       ),
+//       _createBook(
+//         'at viverra venenatis',
+//         'gravida libero facilisis rhoncus urna etiam',
+//         ['Dr. Seuss'],
+//         1999,
+//         utilService.makeLorem(),
+//         972,
+//         ['Computers', 'Hack'],
+//         'http://coding-academy.org/books-photos/2.jpg',
+//         'he',
+//         { amount: 108, currencyCode: 'ILS', isOnSale: false }
+//       ),
+//     ]
+//     console.log('Loaded From Hand by books:')
+//     utilService.saveToStorage(BOOK_KEY, defaultBooks)
+//   }
+//   if (storedBooks) {
+//     console.log('Loaded From gBooks:')
+//     utilService.saveToStorage(BOOK_KEY, storedBooks)
+//   }
+// }
+
 function _createBooks() {
   let storedBooks = utilService.loadFromStorage(BOOK_KEY)
-  console.log('storedBooks:', storedBooks)
-  if (!storedBooks || !storedBooks.length || storedBooks.length === 0) {
-    const defaultBooks = [
-      _createBook(
-        'metus hendrerit',
-        'mi est eros convallis auctor arcu dapibus himenaeos',
-        ['Barbara Cartland'],
-        1999,
-        utilService.makeLorem(),
-        713,
-        ['Computers', 'Hack'],
-        'http://coding-academy.org/books-photos/20.jpg',
-        'en',
-        { amount: 109, currencyCode: 'EUR', isOnSale: false }
-      ),
-      _createBook(
-        'morbi',
-        'lorem euismod dictumst inceptos mi',
-        ['Barbara Cartland'],
-        1978,
-        utilService.makeLorem(),
-        129,
-        ['Computers', 'Hack'],
-        'http://coding-academy.org/books-photos/14.jpg',
-        'sp',
-        { amount: 44, currencyCode: 'EUR', isOnSale: true }
-      ),
-      _createBook(
-        'at viverra venenatis',
-        'gravida libero facilisis rhoncus urna etiam',
-        ['Dr. Seuss'],
-        1999,
-        utilService.makeLorem(),
-        972,
-        ['Computers', 'Hack'],
-        'http://coding-academy.org/books-photos/2.jpg',
-        'he',
-        { amount: 108, currencyCode: 'ILS', isOnSale: false }
-      ),
-    ]
-    utilService.saveToStorage(BOOK_KEY, defaultBooks)
+  if (!storedBooks || !storedBooks.length) {
+    const books = gBooks
+    console.log('Loaded from gBooks directly:')
+    utilService.saveToStorage(BOOK_KEY, books)
   }
-  if (storedBooks) utilService.saveToStorage(BOOK_KEY, storedBooks)
 }
 
 function _createBook(
@@ -167,7 +206,7 @@ function _createBook(
   return book
 }
 
-function _setNextPrevCarId(book) {
+function _setNextPrevBookId(book) {
   return storageService.query(BOOK_KEY).then((books) => {
     const bookIdx = books.findIndex((currBook) => currBook.id === book.id)
     const nextBook = books[bookIdx + 1] ? books[bookIdx + 1] : books[0]
@@ -207,8 +246,8 @@ function _formatBooks(googleData) {
     const book = {
       id: googleBook.id,
       title: volumeInfo.title,
-      description: volumeInfo.description,
-      pageCount: volumeInfo.authors,
+      description: volumeInfo.description || utilService.makeLorem(),
+      pageCount: volumeInfo.pageCount,
       authors: volumeInfo.authors,
       categories: volumeInfo.categories,
       publishedDate: volumeInfo.publishedDate,
@@ -223,4 +262,61 @@ function _formatBooks(googleData) {
     if (volumeInfo.imageLinks) book.thumbnail = volumeInfo.imageLinks.thumbnail
     return book
   })
+}
+
+// STATISTICS
+
+function getPriceStats() {
+  
+  return storageService.query(BOOK_KEY).then((books) => {
+    const booksCountByPriceMap = _getCountByPriceMap(books)
+    const data = Object.keys(booksCountByPriceMap).map((priceName) => ({
+      title: priceName,
+      value: Math.round((booksCountByPriceMap[priceName] / books.length) * 100),
+    }))
+    return data
+  })
+}
+
+function _getCountByPriceMap(books) {
+  const booksCountByPriceMap = books.reduce(
+    (map, book) => {
+      const { amount } = book.listPrice
+
+      if (amount < 70) map.cheap++
+      else if (amount < 100) map.avarage++
+      else map.expensive++
+      return map
+    },
+    { cheap: 0, avarage: 0, expensive: 0 }
+  )
+  return booksCountByPriceMap
+}
+
+function getBookDifficultyStats() {
+  return storageService.query(BOOK_KEY).then((books) => {
+    const booksCountByDifficultyMap = _getCountByDifficultyMap(books)
+    const data = Object.keys(booksCountByDifficultyMap).map(
+      (difficultyName) => ({
+        title: difficultyName,
+        value: Math.round(
+          (booksCountByDifficultyMap[difficultyName] / books.length) * 100
+        ),
+      })
+    )
+    return data
+  })
+}
+
+function _getCountByDifficultyMap(books) {
+  const booksCountByDifficultyMap = books.reduce(
+    (map, book) => {
+      if (book.pageCount < 100) map.lightReading++
+      else if (book.pageCount < 200) map.mediumReading++
+      else map.seriousReading++
+      return map
+    },
+    { lightReading: 0, mediumReading: 0, seriousReading: 0 }
+  )
+  return booksCountByDifficultyMap
 }

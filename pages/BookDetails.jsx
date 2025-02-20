@@ -103,6 +103,7 @@ export function BookDetails() {
             <strong>Categories:</strong> {(book.categories) || [].join(', ')}
           </div>
           <div>
+            {console.log('book:',book)}
             <LongText desc={book.description} />
           </div>
           <div>

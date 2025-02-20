@@ -1,6 +1,6 @@
 import { utilService} from './util.service.js'
 
-export const books = [
+export const gBooks = [
     {
         "id": "OXeMG8wNskc",
         "title": "metus hendrerit",

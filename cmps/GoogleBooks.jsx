@@ -35,7 +35,7 @@ const navigate = useNavigate()
 
     function onSave(book){
         bookService.addGoogleBook(book)
-        .then(()=>console.log('Book Added',book))
+        .then(()=> showSuccessMsg(`Book ${book.title} Added successfully`))
         .catch(() => showErrorMsg(`couldn't save book`))
         .finally(() => navigate('/book'))
         
